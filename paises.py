@@ -123,3 +123,118 @@ def buscar_pais(paises):
         print(f"\n--- RESULTADOS ({len(resultados)} encontrados) ---")
         for pais in resultados:
             print(f"  {pais['nombre']} | Poblacion: {pais['poblacion']} | Superficie: {pais['superficie']} km2 | Continente: {pais['continente']}")
+
+    # funcion para filtrar paises por continente, rango de poblacion y rango de superficie
+def filtrar_paises(paises):
+    if len(paises) == 0:
+        print("No hay paises cargados todavia.")
+        return
+
+    print("\n--- FILTRAR PAISES ---")
+    print("(Dejá en blanco para omitir un filtro)")
+
+    continente = input("Continente: ").strip()
+
+    try:
+        pob_min = input("Poblacion minima: ").strip()
+        pob_min = int(pob_min) if pob_min != "" else None
+
+        pob_max = input("Poblacion maxima: ").strip()
+        pob_max = int(pob_max) if pob_max != "" else None
+
+        sup_min = input("Superficie minima (km2): ").strip()
+        sup_min = int(sup_min) if sup_min != "" else None
+
+        sup_max = input("Superficie maxima (km2): ").strip()
+        sup_max = int(sup_max) if sup_max != "" else None
+
+    except ValueError:
+        print("Error: ingresá solo numeros en los rangos.")
+        return
+
+    resultados = []
+    for pais in paises:
+        if continente and pais["continente"].strip().lower() != continente.lower():
+            continue
+        if pob_min is not None and pais["poblacion"] < pob_min:
+            continue
+        if pob_max is not None and pais["poblacion"] > pob_max:
+            continue
+        if sup_min is not None and pais["superficie"] < sup_min:
+            continue
+        if sup_max is not None and pais["superficie"] > sup_max:
+            continue
+        resultados.append(pais)
+
+    if len(resultados) == 0:
+        print("No se encontraron paises con esos filtros.")
+    else:
+        print(f"\n--- RESULTADOS ({len(resultados)} encontrados) ---")
+        for pais in resultados:
+            print(f"  {pais['nombre']} | Poblacion: {pais['poblacion']} | Superficie: {pais['superficie']} km2 | Continente: {pais['continente']}")
+
+
+# funcion para ordenar paises por nombre, poblacion o superficie
+def ordenar_paises(paises):
+    if len(paises) == 0:
+        print("No hay paises cargados todavia.")
+        return
+
+    print("\n--- ORDENAR PAISES ---")
+    print("1. Por nombre")
+    print("2. Por poblacion")
+    print("3. Por superficie")
+    criterio = input("Elegí una opcion (1-3): ").strip()
+
+    if criterio not in ["1", "2", "3"]:
+        print("Opcion invalida.")
+        return
+
+    orden = input("Orden ascendente o descendente? (a/d): ").strip().lower()
+    if orden not in ["a", "d"]:
+        print("Opcion invalida.")
+        return
+
+    reverso = orden == "d"
+
+    if criterio == "1":
+        paises_ordenados = sorted(paises, key=lambda p: p["nombre"].lower(), reverse=reverso)
+        clave = "nombre"
+    elif criterio == "2":
+        paises_ordenados = sorted(paises, key=lambda p: p["poblacion"], reverse=reverso)
+        clave = "poblacion"
+    else:
+        paises_ordenados = sorted(paises, key=lambda p: p["superficie"], reverse=reverso)
+        clave = "superficie"
+
+    print(f"\n--- PAISES ORDENADOS POR {clave.upper()} ({'descendente' if reverso else 'ascendente'}) ---")
+    for pais in paises_ordenados:
+        print(f"  {pais['nombre']} | Poblacion: {pais['poblacion']} | Superficie: {pais['superficie']} km2 | Continente: {pais['continente']}")
+
+
+# funcion para mostrar estadisticas generales
+def mostrar_estadisticas(paises):
+    if len(paises) == 0:
+        print("No hay paises cargados todavia.")
+        return
+
+    mayor_pob = max(paises, key=lambda p: p["poblacion"])
+    menor_pob = min(paises, key=lambda p: p["poblacion"])
+    promedio_pob = sum(p["poblacion"] for p in paises) // len(paises)
+    promedio_sup = sum(p["superficie"] for p in paises) // len(paises)
+
+    continentes = {}
+    for pais in paises:
+        c = pais["continente"].strip()
+        continentes[c] = continentes.get(c, 0) + 1
+
+    print("\n===== ESTADISTICAS =====")
+    print(f"Total de paises: {len(paises)}")
+    print(f"Mayor poblacion: {mayor_pob['nombre']} ({mayor_pob['poblacion']})")
+    print(f"Menor poblacion: {menor_pob['nombre']} ({menor_pob['poblacion']})")
+    print(f"Promedio de poblacion: {promedio_pob}")
+    print(f"Promedio de superficie: {promedio_sup} km2")
+    print("\nPaises por continente:")
+    for continente, cantidad in sorted(continentes.items()):
+        print(f"  {continente}: {cantidad}")
+    print("========================")

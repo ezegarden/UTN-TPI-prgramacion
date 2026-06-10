@@ -17,7 +17,7 @@ def cargar_csv(paises):
     except FileNotFoundError:
         print("No se encontro el archivo paises.csv.")
     except ValueError:
-        print("Error en el formato del CSV, revisá los datos.")
+        print("Error en el formato del CSV, revisa los datos.")
 
 
 # funcion auxiliar para buscar un pais por nombre exacto
@@ -26,6 +26,7 @@ def buscar_indice(paises, nombre):
         if paises[i]["nombre"].strip().lower() == nombre.strip().lower():
             return i
     return -1
+
 
 # funcion para mostrar el menu principal
 def mostrar_menu():
@@ -124,14 +125,15 @@ def buscar_pais(paises):
         for pais in resultados:
             print(f"  {pais['nombre']} | Poblacion: {pais['poblacion']} | Superficie: {pais['superficie']} km2 | Continente: {pais['continente']}")
 
-    # funcion para filtrar paises por continente, rango de poblacion y rango de superficie
+
+# funcion para filtrar paises por continente, rango de poblacion y rango de superficie
 def filtrar_paises(paises):
     if len(paises) == 0:
         print("No hay paises cargados todavia.")
         return
 
     print("\n--- FILTRAR PAISES ---")
-    print("(Dejá en blanco para omitir un filtro)")
+    print("(Deja en blanco para omitir un filtro)")
 
     continente = input("Continente: ").strip()
 
@@ -149,7 +151,7 @@ def filtrar_paises(paises):
         sup_max = int(sup_max) if sup_max != "" else None
 
     except ValueError:
-        print("Error: ingresá solo numeros en los rangos.")
+        print("Error: ingresa solo numeros en los rangos.")
         return
 
     resultados = []
@@ -184,7 +186,7 @@ def ordenar_paises(paises):
     print("1. Por nombre")
     print("2. Por poblacion")
     print("3. Por superficie")
-    criterio = input("Elegí una opcion (1-3): ").strip()
+    criterio = input("Elegi una opcion (1-3): ").strip()
 
     if criterio not in ["1", "2", "3"]:
         print("Opcion invalida.")
@@ -238,3 +240,35 @@ def mostrar_estadisticas(paises):
     for continente, cantidad in sorted(continentes.items()):
         print(f"  {continente}: {cantidad}")
     print("========================")
+
+
+# bloque principal
+paises = []
+opcion = 0
+
+cargar_csv(paises)
+
+while opcion != 7:
+    mostrar_menu()
+    try:
+        opcion = int(input("Seleccione una opcion: "))
+
+        if opcion == 1:
+            agregar_pais(paises)
+        elif opcion == 2:
+            actualizar_pais(paises)
+        elif opcion == 3:
+            buscar_pais(paises)
+        elif opcion == 4:
+            filtrar_paises(paises)
+        elif opcion == 5:
+            ordenar_paises(paises)
+        elif opcion == 6:
+            mostrar_estadisticas(paises)
+        elif opcion == 7:
+            print("Saliendo del sistema. Hasta luego!")
+        else:
+            print("Opcion invalida. Ingrese un numero entre 1 y 7.")
+
+    except ValueError as e:
+        print(f"Error: {e}")

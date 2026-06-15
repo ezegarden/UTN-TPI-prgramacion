@@ -34,7 +34,8 @@ Al iniciar el programa se cargan automaticamente 20 paises desde el archivo pais
 
 ## Video demostrativo
 
-[Link al video](PEGAR_LINK_AQUI)
+https://youtu.be/Rv2bgChsyQw     video parte 1/2
+https://www.youtube.com/watch?v=00y7V0Vs2oI     video parte 2/2
 
 ## Documentacion
 
